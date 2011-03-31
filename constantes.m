@@ -1,6 +1,5 @@
-function [tolerancia,  eta, beta, N, neuronas_por_capa] = constantes()
+function [tolerancia,  eta, beta, neuronas_por_capa] = constantes()
       tolerancia = 0.1;
       eta = 0.5;
-      beta = 3.25;
-      N = 2;                        % Cantidad de entradas
+      beta = 1.55;
       neuronas_por_capa = [2 2 1];
