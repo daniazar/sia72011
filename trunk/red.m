@@ -32,8 +32,9 @@
 %       - tolerancia
 %       - g
 %
-function [pesos, epocas] = red (neuronas_por_capa, entrenamiento, respuestas, pesos, tolerancia, eta)
+function [pesos, epocas] = red (neuronas_por_capa, entrenamiento, respuestas, pesos)
 
+global tolerancia, eta, beta;
 globalerror = bitmax;
 epocas = 0;
 
