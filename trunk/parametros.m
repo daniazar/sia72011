@@ -1,5 +1,5 @@
 function [entrenamiento, respuestas, pesos] = parametros (N, neuronas_por_capa)
-
+rand('seed', 131);
 fils = 2^N;
 cols = N;
 entrenamiento = ones (fils, cols+1);
