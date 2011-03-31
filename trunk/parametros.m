@@ -1,4 +1,4 @@
-function [entrenamiento, respuestas, pesos] = parametros (N, neuronas)
+function [entrenamiento, respuestas, pesos] = parametros (N, neuronas_por_capa)
 
 fils = 2^N;
 cols = N;
@@ -34,10 +34,11 @@ for i = 1 : fils
   end;
   
 end;
-cantn = length(neuronas);
+
+cantn = length(neuronas_por_capa);
 pesos = cell(cantn, 1);
 
-pesos{1} = rand(neuronas(1),cols + 1)-0.5;
+pesos{1} = rand(neuronas_por_capa(1),cols + 1)-0.5;
 for i = 2 : cantn 
-    pesos{i} = rand(neuronas(i),neuronas(i - 1)+1)-0.5;
+    pesos{i} = rand(neuronas_por_capa(i),neuronas_por_capa(i - 1)+1)-0.5;
 end;

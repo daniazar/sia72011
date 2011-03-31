@@ -32,9 +32,8 @@
 %       - tolerancia
 %       - g
 %
-function [pesos, epocas] = red (neuronas_por_capa, entrenamiento, respuestas, pesos)
+function [pesos, epocas] = red (neuronas_por_capa, entrenamiento, respuestas, pesos, tolerancia, eta, beta)
 
-global tolerancia, eta, beta;
 globalerror = bitmax;
 epocas = 0;
 
@@ -66,7 +65,7 @@ while (globalerror > tolerancia)
             
             for i=1:neuronas_capa
                 h{m}(i) = sum(pesos{m}(i) .* V{m-1});
-                V{m}(i) = g(h{m}(i));
+                V{m}(i) = g(h{m}(i), beta);
             end
         end
         
@@ -75,14 +74,14 @@ while (globalerror > tolerancia)
         neuronas_capa = neuronas_por_capa(M);
 
         xx = respuestas(indexes(mu)) - V{M};
-        delta{M} = g_prima(h{M}) * ( xx );
+        delta{M} = g_prima(h{M}, beta) * ( xx );
         
         % paso 5 (se propagan hacia atras los deltas)
         for m = M:-1:3
             neuronas_capa = neuronas_por_capa(m-1);
             for i = 1:neuronas_capa
                 aux = sum( pesos{m}(i) .* delta{m} );
-                delta{m-1}(i) = g_prima(h{m-1}(i)) * aux;
+                delta{m-1}(i) = g_prima(h{m-1}(i), beta) * aux;
             end
         end
         
@@ -103,7 +102,7 @@ while (globalerror > tolerancia)
         cant_respuestas = neuronas_por_capa(M);
 
         for i=1:cant_respuestas
-            err_patron(i) = (respuestas(indexes(mu),i) - g( sum( pesos{M}(i) .* V{M} ) ))^2;
+            err_patron(i) = (respuestas(indexes(mu),i) - g( sum( pesos{M}(i) .* V{M} ), beta ))^2;
         end
     end
     % calculo el valor del error global

@@ -1,4 +1,3 @@
-function ret = g_prima(x)
+function ret = g_prima(x, beta)
 
-global beta;
-ret = beta * (1-g(x)^2);
+ret = beta * (1-g(x, beta)^2);
