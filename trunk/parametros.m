@@ -1,8 +1,14 @@
-function [entrenamiento, respuestas, pesos] = parametros (N, neuronas_por_capa)
+function [entrenamiento, respuestas, pesos] = parametros (neuronas_por_capa)
+
+% Se puede alterar el valor de la semilla para generar distintos valores de pesos.
 rand('seed', 131);
+
+N = neuronas_por_capa(1);
 fils = 2^N;
 cols = N;
 entrenamiento = ones (fils, cols+1);
+
+% Se genera la tabla de verdad para la compuerta XOR
 
 for j = 1 : cols
   value = -1;
@@ -38,7 +44,8 @@ end;
 cantn = length(neuronas_por_capa);
 pesos = cell(cantn, 1);
 
-pesos{1} = rand(neuronas_por_capa(1),cols + 1)-0.5;
+pesos{1} = [];
+
 for i = 2 : cantn 
     pesos{i} = rand(neuronas_por_capa(i),neuronas_por_capa(i - 1)+1)-0.5;
 end;
