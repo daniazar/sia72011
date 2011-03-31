@@ -1,3 +1,5 @@
 function ret = g(x)
 
-ret = tanh(x);
+global beta;
+
+ret = tanh(beta * x);
