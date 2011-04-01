@@ -83,16 +83,15 @@ while (globalerror > tolerancia)
         delta{M}(2) = g_prima( h{M}(2), beta ) * aux;
 
         % paso 5 (se propagan hacia atras los deltas)
-        for m = M:-1:2
-            neuronas_capa = neuronas_por_capa(m-1);
-            neu_capa_ant = neuronas_por_capa(m);
-            for i = 1 : neuronas_capa + 1               
+        for m = M-1:-1:2
+            neuronas_capa = neuronas_por_capa(m);
+            neu_capa_anterior = neuronas_por_capa(m+1);
+            for i = 2 : neuronas_capa + 1
                 acum = 0;
-                for j = 2 : neu_capa_ant + 1
-                    acum = acum + pesos{m}(i,j) * delta{m}(j);
+                for j = 2 : neu_capa_anterior + 1
+                    acum = acum + pesos{m+1}(j-1,i) * delta{m+1}(j);    %atencion, el cambio de incide!
                 end
-               
-                delta{m-1}(i) = g_prima(h{m-1}(i), beta) * acum;
+                delta{m}(i) = g_prima(h{m}(i), beta) * acum;
             end
         end
         
