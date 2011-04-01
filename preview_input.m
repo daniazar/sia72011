@@ -3,9 +3,14 @@ function preview_input ()
 x = -3:0.1:3;
 y = -3:0.1:3;
 
-z = 3.*((1-x).^2).*exp(-x.^2-(y-1).^2);
+[n m] = size(x);
 
+for i=1:m
+    for j=1:m
+        z(i,j) = 3*((1-x(i))^2)*exp(-x(i)^2-(y(j)-1)^2);
+    end
+end
 
-plot3 (x,y,z);
+mesh (x,y,z);
 
 end
