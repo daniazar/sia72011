@@ -16,7 +16,6 @@ h = {};
             delta{m} = zeros(1, neuronas_capa + 1);
             
             V{m}(1) = -1;
-            h{m}(1) = -1;   % Clave! (Cuanto debe valer esto???)
             for i = 2 : neuronas_capa + 1
                 h{m}(i) = sum(pesos{m}(i-1,:) .* V{m-1});
                 V{m}(i) = g(h{m}(i), beta);
