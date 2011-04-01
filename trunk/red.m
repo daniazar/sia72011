@@ -59,7 +59,7 @@ while (globalerror > tolerancia)
         h = cell(cant_capas, 1);
         delta = cell(cant_capas, 1);
         V{1} = entrenamiento(indexes(mu),:);
-        h{1} = entrenamiento(indexes(mu),:);
+        %h{1} = [];
         %------------------------------------
         % paso 3 (propago por todas las capas)
         for m=2:cant_capas
@@ -70,7 +70,7 @@ while (globalerror > tolerancia)
             delta{m} = zeros(1, neuronas_capa + 1);
             
             V{m}(1) = -1;
-            h{m}(1) = -1;   % Clave! (Cuanto debe valer esto???)
+          %  h{m}(1) = -1;   % Clave! (Cuanto debe valer esto???)
             for i = 2 : neuronas_capa + 1
                 h{m}(i) = sum(pesos{m}(i-1,:) .* V{m-1});
                 V{m}(i) = g(h{m}(i), beta);
@@ -79,21 +79,20 @@ while (globalerror > tolerancia)
         
         % paso 4 (se calculan los delta para la capa de salida)
         M = cant_capas;
-        aux = respuestas(indexes(mu)) - V{M};
-        delta{M} = g_prima( h{M}(2), beta ) * aux(2);  % (2) CABLEADO
+        aux = respuestas(indexes(mu)) - V{M}(2);% por que hay un -1
+        delta{M}(2) = g_prima( h{M}(2), beta ) * aux;
 
         % paso 5 (se propagan hacia atras los deltas)
         for m = M:-1:2
             neuronas_capa = neuronas_por_capa(m-1);
-            for i = 1 : neuronas_capa + 1                   % PENDIENTE: REVISAR ESTE CICLO!!
-                if( m == M )
-                    aux = sum( pesos{m}(:,i) .* delta{m} );
-                else
-                    aux1 = pesos{m}(:,i);
-                    aux1 = [ 0 aux1' ];
-                    aux = sum( aux1 .* delta{m} );
+            neu_capa_ant = neuronas_por_capa(m);
+            for i = 1 : neuronas_capa + 1               
+                acum = 0;
+                for j = 2 : neu_capa_ant + 1
+                    acum = acum + pesos{m}(i,j) * delta{m}(j);
                 end
-                delta{m-1}(i) = g_prima(h{m-1}(i), beta) * aux;
+               
+                delta{m-1}(i) = g_prima(h{m-1}(i), beta) * acum;
             end
         end
         
@@ -101,21 +100,17 @@ while (globalerror > tolerancia)
         for m=2:cant_capas
             neuronas_capa = neuronas_por_capa(m);
             neuronas_capa_anterior = neuronas_por_capa(m-1);
-            for i=1:neuronas_capa
-                for j=1:neuronas_capa_anterior + 1          % CLAVE!!
+            for i=2:neuronas_capa + 1
+                for j=1:neuronas_capa_anterior + 1
 %                    disp(['i: ' num2str(i) ' j: ' num2str(j) ' m: ' num2str(m)])
                     delta_pesos = eta * delta{m}(i) * V{m-1}(j);
-                    pesos{m}(i, j) = pesos{m}(i, j) + delta_pesos;
+                    pesos{m}(i -1, j) = pesos{m}(i -1, j) + delta_pesos; % en esto hay duda
                 end
             end
         end
         %------------------------------------
-        M = cant_capas;
-        cant_respuestas = neuronas_por_capa(M);
 
-        for i=1:cant_respuestas
-            err_patron(i) = (respuestas(indexes(mu),i) - g( sum( pesos{M}(i) .* V{M} ), beta ))^2;
-        end
+            err_patron(indexes(mu)) = (respuestas(indexes(mu)) - V{M}(2))^2;
     end
     % calculo el valor del error global
     globalerror = sum(err_patron)/2
