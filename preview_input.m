@@ -1,7 +1,7 @@
 function preview_input ()
 
-x = -3:0.1:3;
-y = -3:0.1:3;
+x = -2:0.1:1;
+y = -1:0.1:2;
 
 [n m] = size(x);
 
