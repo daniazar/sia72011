@@ -14,13 +14,15 @@ for i=1:m1
     for j=1:m2
         count = count+1;
         entrenamiento(count,1) = -1;
-        entrenamiento(count,2) = x(i);
         entrenamiento(count,3) = y(j);
+        entrenamiento(count,2) = x(i);
         respuestas(count) = 3*((1-x(i))^2)*exp(-x(i)^2-(y(j)-1)^2);
     end
 end
 
 respuestas = respuestas';
+
+plot3(entrenamiento(:,2),entrenamiento(:,3),respuestas, '.');
 
 cantn = length(neuronas_por_capa);
 pesos = cell(cantn, 1);
