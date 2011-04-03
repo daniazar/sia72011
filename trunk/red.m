@@ -45,9 +45,11 @@ if(cant_patrones ~= length(respuestas) || neuronas_por_capa(cant_capas) ~= size(
     disp('Matriz de respuestas no valida');    
     return;
 end
+
 err_patron = [];
 eta_counter = 0;
 last_error = globalerror;
+
 while (globalerror > tolerancia)
     epocas = epocas+1;
     indexes = randperm(cant_patrones);
@@ -114,27 +116,28 @@ while (globalerror > tolerancia)
             resp(indexes(mu)) = V{M}(2);
             
     end
+
     % calculo el valor del error global
     last_error = globalerror;
-    globalerror = sum(err_patron)/2
-    
-    delta_error = globalerror - last_error;
-            if( delta_error >= 0)
-                eta_counter = 0;
-                eta = eta -0.01 * eta;
-            else
-                eta_counter = eta_counter +1;
-                if(eta_counter > 10)
-                    eta = eta +0.01;
-                end
-            end
+    globalerror = sum(err_patron)/2  
+
+%    delta_error = globalerror - last_error;
+%    if( delta_error >= 0)
+%        eta_counter = 0;
+%        eta = eta -0.01 * eta;
+%    else
+%        eta_counter = eta_counter +1;
+%        if(eta_counter > 10)
+%            eta = eta +0.01;
+%        end
+%    end
             
 end
 
-    hold off
-    plot(entrenamiento(:, 2), resp)
-    hold on
-    plot(entrenamiento(:, 2), respuestas)
+hold off
+plot(entrenamiento(:, 2), resp)
+hold on
+plot(entrenamiento(:, 2), respuestas)
 
 
 
